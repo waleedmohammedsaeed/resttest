@@ -8,4 +8,14 @@ class Actions(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Customer(models.Model):
+    name = models.CharField(max_length=40)
+    ctype = models.CharField(max_length=20)
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Customer'
+        verbose_name_plural = 'Customers'
 
