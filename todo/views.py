@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import  JsonResponse, Http404
+from django.http import  JsonResponse, Http404, HttpResponse
 from .models import Actions, Customer
 from .serializer.serializers import ActionsSerializer, CustomerSerilaizer
 from rest_framework.decorators import api_view
@@ -7,7 +7,7 @@ from rest_framework.response import Response
 from rest_framework import status 
 # Create your views here.
 
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST']) 
 def todo(request):
     if request.method == 'GET':
         tasks = Actions.objects.all()
@@ -52,4 +52,19 @@ def customer(request, id):
             return Response({'{customer': serializer.data})
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['GET', 'POST'])
+def addnewcustomer(request):
+    if request.method  == 'GET':
+        customer = Customer.objects.all()
+        serializer = CustomerSerilaizer(customer, many=True)
+        return Response({'customer':serializer.data})
+    elif request.method == 'POST':
+        serializer = CustomerSerilaizer(data=request.data)
+        print('waleed django')
+        if serializer.is_valid():
+            serializer.save()
+            return Response({'{customer': serializer.data})
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
